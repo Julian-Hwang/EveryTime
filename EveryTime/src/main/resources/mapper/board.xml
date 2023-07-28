@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace = "com.julian5383.model.BoardDao">
+	<!--중고게시판 게시물-->
+	<resultMap id="sellresult" type="SellDto">
+		<result property="sell_no" column="sell_no"/>
+		<result property="title" column="title"/>
+		<result property="content" column="content"/>
+		<result property="photo" column="photo"/>
+		<result property="photo_url" column="photo_url"/>
+		<result property="buyornot" column="buyornot"/>
+		<result property="finornot" column="finornot"/>
+		<result property="write_date" column="write_date"/>
+		<result property="update_date" column="update_date"/>
+		<result property="write_id" column="write_id"/>
+		<result property="view" column="view"/>
+	</resultMap>
+	<select id="selectAll_sell" resultMap="sellresult">
+	  <![CDATA[
+	     select * from sell 
+	     where IF(#{search} IS NOT NULL AND #{search} != '', title LIKE CONCAT('%', #{search}, '%') OR content LIKE CONCAT('%', #{search}, '%'), true) 
+	     order by write_date desc
+	  ]]>
+   </select>
+	<insert id="insert_sell" parameterType="SellDto">
+		<![CDATA[
+			INSERT INTO sell (title, content,photo,photo_url,price,buyornot,finornot, write_date, write_id)
+			values(#{title},#{content},#{photo},#{photo_url},#{price},#{buyornot},#{finornot},default,#{write_id})
+		]]>
+	</insert>
+	<select id="select_sell" resultType="SellDto" parameterType="int">
+		<![CDATA[
+			select * from sell where sell_no=#{sell_no}
+		]]>
+	</select>
+	<update id="update_sell" parameterType="SellDto">
+		<![CDATA[
+			update sell set title=#{title}, content=#{content},
+			photo=#{photo}, photo_url=#{photo_url},price=#{price},
+			buyornot=#{buyornot},finornot=#{finornot} ,update_date=NOW() 
+			where sell_no=#{sell_no}
+		]]>
+	</update>
+	<update id="viewcount" parameterType="int">
+		<![CDATA[
+			update sell set view=view+1 where sell_no=#{sell_no}
+		]]>
+	</update>
+	<delete id="delete_sell" parameterType="int">
+		<![CDATA[
+			delete from sell where sell_no=#{sell_no}
+		]]>
+	</delete>
+	
+	<!--중고게시판 댓글-->
+	<resultMap id="sellc" type="SellCommentDto">
+		<result property="id" column="id"/>
+		<result property="sell_no" column="sell_no_sc"/>
+		<result property="write_id" column="write_id_sc"/>
+		<result property="content" column="content_sc"/>
+		<result property="write_date" column="write_date_sc"/>
+		<result property="update_date" column="update_date_sc"/>
+	</resultMap>
+	<select id="selectAll_sc" resultMap="sellc">
+		<![CDATA[
+			select * from sell_comment order by write_date_sc desc
+		]]>
+	</select>
+	<insert id="insert_sc" parameterType="SellCommentDto">
+		<![CDATA[
+			INSERT INTO sell_comment (sell_no_sc,write_id_sc,content_sc,write_date_sc)
+			values(#{sell_no},#{write_id},#{content},default)
+		]]>
+	</insert>
+	<update id="update_sc" parameterType="SellCommentDto">
+		<![CDATA[
+			update sell_comment set content_sc=#{content},sell_no_sc=#{sell_no},update_date_sc=NOW() where id=#{id}
+		]]>
+	</update>
+	<delete id="delete_sc" parameterType="int">
+		<![CDATA[
+			delete from sell_comment where id=#{id}
+		]]>
+	</delete>
+</mapper>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head th:insert="./_inc/title.html">
+
+</head>
+
+<body>
+    <header th:insert="./_inc/header.html">
+
+    </header>
+    <form>
+        <table class="table" align="center">
+            <thead class="table-dark">
+                <tr align="center">
+                    <th>유형</th>
+                    <th>제목</th>
+                    <th>내용</th>
+                    <th>작성자</th>
+                    <th>일자</th>
+                    <th>조회수</th>
+                    <th>거래여부</th>
+                    <th>사진</th>
+                </tr>
+            </thead>
+            <tbody th:if="${#strings.isEmpty(board)}">
+                <tr>
+                    <td>
+                        <p align="center">
+                            <b><span>등록된 글이 없습니다.</span></b>
+                        </p>
+                    </td>
+                </tr>
+            </tbody>
+            <tbody th:unless="${#strings.isEmpty(board)}">
+                <tr align="center" th:each="board:${board}">
+                    <td th:if="${board.buyornot== 'S'}" width="10%">판매</td>
+                    <td th:if="${board.buyornot== 'B'}" width="10%">구매</td>
+                    <td width="10%">[[${board.title}]]</td>
+                    <td align="left" width="30%">
+                        <a th:href="@{/view(sell_no=${board.sell_no})}">
+                            [[${board.content}]]
+                        </a>
+                    </td>
+                    <td width="10%">[[${board.write_id}]]</td>
+                    <td width="10%">[[${board.write_date}]]</td>
+                    <td width="10%">[[${board.view}]]</td>
+                    <td width="10%">[[${board.finornot}]]</td>
+                    <td width="10%">
+                        <img width="100" height="100" th:if="${board.photo_url}" th:src="@{${board.photo_url}}">
+                        <img class="img-thumbnail" th:unless="${board.photo_url}" src="/image/white.png">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <form id="search" th:action="@{/list}" class="d-flex" role="search">
+	          <input name="search" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+	          <button class="btn btn-outline-light" type="submit">Search</button>
+	    </form>
+        
+        <div align="right">
+			
+            <button type="button" class="btn btn-danger" onClick="location.href='/write'">상품등록</button>
+        </div>
+        
+    </form>
+</body>
+
+</html>
