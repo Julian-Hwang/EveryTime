@@ -27,8 +27,6 @@ public interface BoardDao {
 	
 	public void insert_sc(SellCommentDto dto)throws DataAccessException;
 	
-	public SellCommentDto select_sc(int id)throws DataAccessException;
-	
 	public void update_sc(SellCommentDto dto)throws DataAccessException;
 	
 	public void delete_sc(int id)throws DataAccessException;

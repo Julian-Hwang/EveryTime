@@ -73,11 +73,6 @@ public class BoardService {
 		dao.insert_sc(dto);
 	}
 	
-	public SellCommentDto select_sc(int id) {
-		SellCommentDto dto = dao.select_sc(id);
-		return dto;
-	}
-	
 	public void update_sc(SellCommentDto dto) throws Exception {
 		dao.update_sc(dto);
 	}
